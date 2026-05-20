@@ -1001,10 +1001,10 @@ On \(E_{a}\), the Bernoulli component is constant within arm \(a\), and hence
 contributes nothing to the within-arm sample variance.
 Therefore, on \(E_{a}\),
 \begin{equation*}
-  \tilde{\sigma}_{m} (a) = \omega
-  \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (\varepsilon_{i} -
-  \bar{\varepsilon} (a))^{2} \right\}^{1/2}, \quad \text{where} \quad
-  \bar{\varepsilon} (a) = \frac{1}{m_{a}} \sum_{i : A_{i} = a} \varepsilon_{i}.
+  \tilde{\sigma}_{m} (a) = K^{1/2} \omega \left\{ \frac{1}{m_{a}} \sum_{i :
+  A_{i} = a} (\varepsilon_{i} - \bar{\varepsilon} (a))^{2} \right\}^{1/2}, \quad
+  \text{where} \quad \bar{\varepsilon} (a) = \frac{1}{m_{a}} \sum_{i : A_{i} =
+  a} \varepsilon_{i}.
 \end{equation*}
 Since
 \begin{equation*}
@@ -1013,8 +1013,8 @@ Since
 \end{equation*}
 we obtain
 \begin{equation*}
-  \E \left[ \tilde{\sigma}_{m}^{-1} (a) \middle| E_{a} \right] = \omega^{-1}
-  \sqrt{m_{a}} \E \left[ \chi_{m_{a} - 1}^{-1} \right].
+  \E \left[ \tilde{\sigma}_{m}^{-1} (a) \middle| E_{a} \right] = K^{-1/2}
+  \omega^{-1} \sqrt{m_{a}} \E \left[ \chi_{m_{a} - 1}^{-1} \right].
 \end{equation*}
 The last expectation is finite whenever \(m_{a} > 2\).
 Since \(m \geq 6\), \(m_{a} \geq 3\) and so this expectation is finite and
@@ -1023,21 +1023,21 @@ Hence
 \begin{equation*}
   \E \left[ \tilde{\sigma}_{m}^{-1} (a) \right] \geq
   \E \left[ \tilde{\sigma}_{m}^{-1} (a) \middle| E_{a} \right] \Pr (E_{a}) =
-  2^{1 - m_{a}} \omega^{-1} \sqrt{m_{a}} \E \left[ \chi_{m_{a} - 1}^{-1}
-  \right] \to \infty,
+  2^{1 - m_{a}} K^{-1/2} \omega^{-1} \sqrt{m_{a}} \E \left[ \chi_{m_{a} -
+  1}^{-1} \right] \to \infty,
 \end{equation*}
 as \(\omega \downarrow 0\).
 It remains to note that \(\E \left[ \tilde{\sigma}_{m} (a) \right]\)
 does not vanish as \(\omega \downarrow 0\):
 \begin{equation*}
   \tilde{\sigma}_{m} (a) \overset{\mathscr{L}_{1}}{\to}
-  \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (W_{i} - \bar{W}_{a})^2
+  K^{1/2} \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (W_{i} - \bar{W}_{a})^2
   \right\}^{1/2}.
 \end{equation*}
 Therefore,
 \begin{equation*}
   \E \left[ \tilde{\sigma}_{m} (a) \right] \to
-  \E \left[ \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (W_{i} -
+  K^{1/2} \E \left[ \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (W_{i} -
   \bar{W}_{a})^{2} \right\}^{1/2} \right] > 0.
 \end{equation*}
 Therefore, \(B_{m} \to \infty\).
