@@ -1,4 +1,4 @@
-\documentclass[aspectratio=169, 10pt, handout]{beamer}
+\documentclass[aspectratio=169, 10pt]{beamer}
 
 %%%%%%%%%%%%%%%%%%%
 % Beamer settings %
@@ -46,7 +46,6 @@
 \newtheorem*{defn*}{Definition}
 \newtheorem{asm}{Assumption}
 \newtheorem*{asm*}{Assumption}
-\newtheorem*{prop*}{Proposition}
 
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}
@@ -55,6 +54,7 @@
 \newtheorem*{thm*}{Theorem}
 \newtheorem*{lem*}{Lemma}
 \newtheorem*{cor*}{Corollary}
+\newtheorem*{prop*}{Proposition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Math: Operators and Symbols %
@@ -92,6 +92,8 @@
 \def\FNA{\mathrm{FNA}}
 \def\BA{\mathrm{BA}}
 \def\INA{\mathrm{INA}}
+\def\calL{\mathcal{L}}
+\def\calF{\mathcal{F}}
 
 
 \newcommand\mapsfrom{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
@@ -148,7 +150,7 @@ May 2026}
       \item \textbf{Wave 2:} large main, used to estimate the ATE.
     \end{itemize}
     \vfill
-  \item How to improve main wave?
+  \item How to improve precision in main wave?
     \vfill
     \begin{itemize}
       \item Choose optimal treatment proportions ---
@@ -158,6 +160,12 @@ May 2026}
     \end{itemize}
     \vfill
   \item We focus on implementation issues for the first problem here.
+    \vfill
+    \begin{itemize}
+      \item \textbf{Motivation:} most experiments running pilots in economics
+        few experimental subjects (\(\leq 20\)).
+        typically have 20 subjects or fewer.
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -175,7 +183,7 @@ May 2026}
 
 \begin{itemize}
   \item Binary treatment. \emph{Potential outcomes:}
-    \((Y (0), Y (1)) \sim F\).
+    \((Y (0), Y (1)) \sim F\) [infinite superpopulation].
     \emph{Observed outcome:} \(Y = A Y (1) + (1 - A) Y (0)\) for treatment
     assignment \(A\).
     \vfill
@@ -231,8 +239,13 @@ May 2026}
       \implies
       \text{optimal variance} = (\sigma (1) + \sigma (0))^{2} \right].
     \end{equation*}
-    Intuition: assign higher proportion to arm that is more difficult to learn
-    about.
+    \vfill
+    \begin{itemize}
+      \item \textbf{Intuition:} assign higher proportion to arm that is more
+        difficult to learn about.
+        \vfill
+      \item \textbf{Note:} \(\pi_{\ast} = 1/2\) if \(\sigma (1) = \sigma (0)\).
+    \end{itemize}
     \vfill
   \item Infeasible: \(\sigma^{2} (a)\) are unknown.
 \end{itemize}
@@ -264,8 +277,8 @@ May 2026}
       \Normal (0, (\sigma (1) + \sigma (0))^{2}).
     \end{equation*}
     \vfill
-  \item If pilot is large, \(\hat{\theta}\) with FNA has efficiency close to
-    infeasible NA.
+  \item If pilot is large, \(\hat{\theta}\) with FNA has asymptotic efficiency
+    equal to infeasible NA.
 \end{itemize}
 \end{frame}
 
@@ -375,6 +388,14 @@ the FNA cannot attain the infeasible optimum.
 \frametitle{When is BA Better than FNA?}
 Define \(Z_{m} = \frac{\tilde{\sigma}_{m} (1) / \sigma (1)}{\tilde{\sigma}_{m}
 (0) / \sigma (0)}\) and \(B_{m} = \frac{1}{2} \E [Z_{m}^{- 1} + Z_{m}]\).
+
+Let \(Z_{k} = X_{1,k}/X_{2,k}\) for \(X_{1,k}\) independent to \(X_{2,k}\) and \(\Var
+[X_{j,k}] = 1\).
+Let \(B_{k} = \frac{1}{2} E [Z_{k}^{-1} + Z_{k}]\).
+Claim: there exist sequences for which \(B_{k} \to \infty\).
+
+
+
 Can show
 \begin{equation*}
   \Var_{\BA} \leq \Var_{\FNA} \quad \iff \quad
@@ -382,6 +403,7 @@ Can show
   \frac{\sigma (1)}{\sigma (0)} + 1 \leq 0.
 \end{equation*}
 \vfill
+\pause
 
 By quadratic formula, \(\Var_{\BA} \leq \Var_{\FNA}\) is equivalent to
 \vfill
@@ -393,9 +415,10 @@ By quadratic formula, \(\Var_{\BA} \leq \Var_{\FNA}\) is equivalent to
   \sbox0{\ref{frm--prf--when-is-ba-better}}%
   \beamergotobutton{Proof}}
 
-\textbf{Note:} \(B_{m} \geq 1\) can be shown by AM-GM inequality ---
+\textbf{Note:} \(B_{m} > 1\) can be shown by AM-GM inequality ---
 \(c_{m}\) is well-defined.
 \vfill
+\pause
 
 \textbf{Properties of \(C_m\):}
 \begin{itemize}
@@ -468,25 +491,73 @@ where \(\delta_{m}^{-}, \delta_{m}^{+} = o (m^{-1/2})\) as \(m \to \infty\) and
 \begin{defn*}[Efficiency loss of FNA vs.\ BA]
 \begin{equation*}
   \mathcal{L}^{d} (F) =
-  \E \left[ \frac{\sigma^{2} (1)}{\tilde{\pi}} + \frac{\sigma^{2} (0)}{1 -
-  \tilde{\pi}} \right] - 2 (\sigma^{2} (1) + \sigma^{2} (0)), \qquad
-  \mathcal{L}^{r} (F) = \frac{\E \left[ \frac{\sigma^{2} (1)}{\tilde{\pi}} +
-  \frac{\sigma^{2} (0)}{1 - \tilde{\pi}} \right]}{2(\sigma^2(1)+\sigma^2(0))}.
+  \E_{F} \left[ \frac{\sigma_{F}^{2} (1)}{\tilde{\pi}} + \frac{\sigma_{F}^{2}
+  (0)}{1 - \tilde{\pi}} \right] - 2 (\sigma_{F}^{2} (1) + \sigma_{F}^{2} (0)),
+  \qquad
+  \mathcal{L}^{r} (F) = \frac{\E_{F} \left[ \frac{\sigma_{F}^{2}
+  (1)}{\tilde{\pi}} + \frac{\sigma_{F}^{2} (0)}{1 - \tilde{\pi}}
+  \right]}{2 (\sigma_{F}^{2} (1) + \sigma_{F}^{2} (0))}.
 \end{equation*}
 \end{defn*}
 \vfill
 \begin{prop*}
 Under fixed-\(m\) asymptotics, with
-\(\mathcal{F}(K) = \{F:\, 0 < \sigma^2(0),\sigma^2(1) \le K\}\):
+\(\mathcal{F}(K) = \{F : 0 < \sigma_{F}^{2} (0), \sigma_{F}^{2} (1) \leq K\}\):
 \begin{align*}
-  \sup_{F \in \mathcal{F}(K)}\!\mathcal{L}^d(F) &= +\infty,
-   & \inf_{F \in \mathcal{F}(K)}\!\mathcal{L}^d(F) &= -K, \\[2pt]
-  \sup_{F \in \mathcal{F}(\infty)}\!\mathcal{L}^r(F) &= +\infty,
-   & \inf_{F \in \mathcal{F}(\infty)}\!\mathcal{L}^r(F) &= \tfrac{1}{2}.
+  \sup_{F \in \mathcal{F}(K)} \mathcal{L}^d (F) =
+  & \, +\infty,
+  & \inf_{F \in \mathcal{F}(K)} \mathcal{L}^d (F) =
+  & \, -K, \\
+  \sup_{F \in \mathcal{F}(K)}\!\mathcal{L}^r(F) =
+  & \, \infty,
+  & \inf_{F \in \mathcal{F}(K)}\!\mathcal{L}^r(F) =
+  & \, \tfrac{1}{2}.
 \end{align*}
 \end{prop*}
 \vfill
-In terms of maximum regret, BA dominates FNA.
+In terms of regret, BA dominates FNA.
+\end{frame}
+
+\begin{frame}
+\frametitle{Efficiency loss: main ideas}
+Can show
+\begin{equation*}
+  \calL^{d} = 2 \sigma (1) \sigma (0) (B_{m} - 1) - (\sigma (1) - \sigma
+  (0))^{2} \qquad \text{and} \qquad
+  \calL^{r} = \frac{1}{2} + B_{m} \frac{\sigma (1) \sigma (0)}{\sigma^{2} (1) +
+  \sigma^{2} (0)}.
+\end{equation*}
+\vfill
+\pause
+
+For fixed \(B_{m} > 1\):
+\vfill
+\begin{itemize}
+  \item Lower bounds over \(\calF (K)\): fix \(\sigma^{2} (0) = K\) and push
+    \(\sigma^{2} (1) \downarrow 0\)
+    \begin{itemize}
+      \item \(\calL^{d} \downarrow -K\); \(\calL^{r} = \frac{1}{2} + B_{m}
+        \frac{\sigma (1) K^{1/2}}{\sigma^{2} (1) + K} \downarrow \frac{1}{2}\)
+    \end{itemize}
+    \vfill
+  \item Upper bounds over \(\calF (K)\): for \(\sigma^{2} (a) = K\),
+    \begin{itemize}
+      \item \(\calL^{d} = 2 K (B_{m} - 1)\); \(\calL^{r} = (1 + B_{m}) / 2\).
+    \end{itemize}
+\end{itemize}
+\vfill
+\pause
+
+Key idea for upper bounds:
+\vfill
+\begin{itemize}
+  \item \(B_{m}\) is an expectation of ratios of unit variance random variables.
+    \vfill
+  \item Unit variance does not control magnitude of expectations of ratios:
+    there exist sequences of DGPs \(\{F_{j}\} \subseteq \calF (K)\) such that
+    \(B_{m} (F_{j}) \to \infty\) as \(j \to \infty\) with both \(m\) and \(K\)
+    fixed!
+\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
