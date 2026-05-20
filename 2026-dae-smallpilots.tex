@@ -80,7 +80,8 @@
 \def\pto{\overset{\mathrm{p}}{\to}}
 \def\dto{\rightsquigarrow}
 \def\Normal{\mathrm{N}} % Normal distribution
-\def\Unif{\mathrm{Uniform}} % Normal distribution
+\def\Bern{\mathrm{Bernoulli}} % Bernoulli distribution
+\def\Unif{\mathrm{Uniform}} % Uniform distribution
 
 \def\Op{O_{\mathrm{p}}}
 \def\op{o_{\mathrm{p}}}
@@ -545,10 +546,13 @@ Key idea for upper bounds:
 \begin{itemize}
   \item \(B_{m}\) is an expectation of ratios of unit variance random variables.
     \vfill
-  \item Unit variance does not control magnitude of expectations of ratios:
+  \item \label{itm--efficiency-loss-proof-sketch}
+    Unit variances does not control magnitude of expectations of ratios:
     there exist sequences of DGPs \(\{F_{j}\} \subseteq \calF (K)\) such that
     \(B_{m} (F_{j}) \to \infty\) as \(j \to \infty\) with both \(m\) and \(K\)
-    fixed!
+    fixed! \hyperlink{frm--prf--Bm-explodes-existence}{%
+  \sbox0{\ref{frm--prf--Bm-explodes-existence}}%
+  \beamergotobutton{Proof}}
 \end{itemize}
 \end{frame}
 
@@ -948,4 +952,94 @@ Now note that \(c_{m,1} = 1 / c_{m,2}\):
 \end{equation*}
 \end{frame}
 
+\begin{frame}[t,plain,noframenumbering,allowframebreaks]
+\frametitle{Efficiency loss: proof that \(B_{m}\) can explode within family
+\hyperlink{itm--efficiency-loss-proof-sketch}{%
+  \sbox0{\ref{itm--efficiency-loss-proof-sketch}}%
+  \beamergotobutton{RETURN}}}
+\label{frm--prf--Bm-explodes-existence}
+Fix an integer \(m \geq 6\) --- things are worse when \(m < 6\).
+Set \(m_{1} = \lfloor m / 2 \rfloor\), \(m_{0} = m - m_{1}\).
+For brevity of notation, drop tildes for pilot outcomes.
+For \(\omega \leq 1/2\),
+\begin{equation*}
+  Y_{i} (1) = Y_{i} (0) = Y_{i} = K^{1/2} (W_{i} + \omega \cdot
+  \varepsilon_{i}),
+\end{equation*}
+with \(W_{i} \overset{\iid}{\sim} \Bern (1/2)\), \(U_{i} \overset{\iid}{\sim}
+\Normal (0, 1)\), and furthermore \(\{W_{i}\}_{i = 1}^{m} \indep
+\{U_{i}\}_{i=1}^{m}\).
+The two potential outcomes are identical, and \(\sigma^{2} (a) = \sigma^{2} =
+K (\frac{1}{4} + \omega^{2}) \leq K / 2\).
+By exogenous (ignorable) assignment and permutation invariance,
+\begin{equation*}
+  \begin{split}
+    B_{m} =
+    & \, \frac{1}{2} \left( \E \left[ \sigma (0) / \tilde{\sigma}_{m} (0)
+    \right] \E \left[ \tilde{\sigma}_{m} (1) / \sigma (1) \right] +
+    \E \left[ \sigma (1) / \tilde{\sigma}_{m} (1) \right] \E \left[
+    \tilde{\sigma}_{m} (0) / \sigma (0) \right] \right) \\
+    =
+    & \, \frac{1}{2} \left( \E \left[ \tilde{\sigma}_{m} (0)^{-1} \right] \E
+    \left[ \tilde{\sigma}_{m} (1) \right] + \E \left[ \tilde{\sigma}_{m}
+    (1)^{-1} \right] \E \left[ \tilde{\sigma}_{m} (0) \right] \right).
+  \end{split}
+\end{equation*}
+We now show that as \(\omega \downarrow 0\), \(B_{m} \to \infty\).
+Fix \(a \in \{0, 1\}\), and consider the event
+\begin{equation*}
+  E_{a} = \{W_{i} = W_{j} \text{ for all } i, j \text{ such that } A_{i} = A_{j}
+  = a\}.
+\end{equation*}
+That is, \(E_{a}\) is the event that all Bernoulli components in arm \(a\) are
+equal.
+Conditional on the assignment,
+\begin{equation*}
+  \Pr (E_{a}) = 2^{1 - m_{a}} > 0.
+\end{equation*}
+On \(E_{a}\), the Bernoulli component is constant within arm \(a\), and hence
+contributes nothing to the within-arm sample variance.
+Therefore, on \(E_{a}\),
+\begin{equation*}
+  \tilde{\sigma}_{m} (a) = \omega
+  \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (\varepsilon_{i} -
+  \bar{\varepsilon} (a))^{2} \right\}^{1/2}, \quad \text{where} \quad
+  \bar{\varepsilon} (a) = \frac{1}{m_{a}} \sum_{i : A_{i} = a} \varepsilon_{i}.
+\end{equation*}
+Since
+\begin{equation*}
+  \sum_{i : A_{i} = a} (\varepsilon_{i} - \bar{\varepsilon} (a))^{2}
+  \sim \chi^{2}_{m_{a} - 1},
+\end{equation*}
+we obtain
+\begin{equation*}
+  \E \left[ \tilde{\sigma}_{m}^{-1} (a) \middle| E_{a} \right] = \omega^{-1}
+  \sqrt{m_{a}} \E \left[ \chi_{m_{a} - 1}^{-1} \right].
+\end{equation*}
+The last expectation is finite whenever \(m_{a} > 2\).
+Since \(m \geq 6\), \(m_{a} \geq 3\) and so this expectation is finite and
+strictly positive.
+Hence
+\begin{equation*}
+  \E \left[ \tilde{\sigma}_{m}^{-1} (a) \right] \geq
+  \E \left[ \tilde{\sigma}_{m}^{-1} (a) \middle| E_{a} \right] \Pr (E_{a}) =
+  2^{1 - m_{a}} \omega^{-1} \sqrt{m_{a}} \E \left[ \chi_{m_{a} - 1}^{-1}
+  \right] \to \infty,
+\end{equation*}
+as \(\omega \downarrow 0\).
+It remains to note that \(\E \left[ \tilde{\sigma}_{m} (a) \right]\)
+does not vanish as \(\omega \downarrow 0\):
+\begin{equation*}
+  \tilde{\sigma}_{m} (a) \overset{\mathscr{L}_{1}}{\to}
+  \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (W_{i} - \bar{W}_{a})^2
+  \right\}^{1/2}.
+\end{equation*}
+Therefore,
+\begin{equation*}
+  \E \left[ \tilde{\sigma}_{m} (a) \right] \to
+  \E \left[ \left\{ \frac{1}{m_{a}} \sum_{i : A_{i} = a} (W_{i} -
+  \bar{W}_{a})^{2} \right\}^{1/2} \right] > 0.
+\end{equation*}
+Therefore, \(B_{m} \to \infty\).
+\end{frame}
 \end{document}
